@@ -1,0 +1,19 @@
+{
+  "name": "sun",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index-anQlQMJ9.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chenkjia/sun.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chenkjia/sun/issues"
+  },
+  "homepage": "https://github.com/chenkjia/sun#readme"
+}
