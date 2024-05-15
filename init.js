@@ -43,7 +43,8 @@ const foodBuildings = {
     "Pumpkin Soup": 8,
     // "Boiled Eggs": 5,
     "Kale Omelette": 1,
-    "Kale Stew": 1
+    "Kale Stew": 1,
+    "Gumbo": 2
   },
   "Kitchen": {
     "Mushroom Jacket Potatoes": 20,
