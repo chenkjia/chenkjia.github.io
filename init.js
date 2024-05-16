@@ -35,13 +35,13 @@ const fruitSeeds = ['Blueberry Seed', 'Orange Seed', 'Apple Seed', 'Banana Plant
 const compostBuildings = ['Compost Bin','Turbo Composter']
 const foodBuildings = {
   "Fire Pit": {
-    // "Reindeer Carrot": 5,
+    "Reindeer Carrot": 5,
     "Mashed Potato": 20,
     "Bumpkin Broth": 10,
     // "Mushroom Soup": 3,
     // "Cabbers n Mash": 2,
     "Pumpkin Soup": 8,
-    // "Boiled Eggs": 5,
+    "Boiled Eggs": 5,
     "Kale Omelette": 1,
     "Kale Stew": 1,
     "Gumbo": 2
@@ -58,15 +58,17 @@ const foodBuildings = {
     "Kale & Mushroom Pie": 1
   },
   "Smoothie Shack": {
-    "Apple Juice": 1,
-    "Bumpkin Detox": 1
+    "Banana Blast": 2,
+    "Bumpkin Detox": 3,
+    "Apple Juice": 3,
+    "Orange Juice": 3
   },
   "Deli": {
+    "Fermented Fish": 3,
+    "Power Smoothie": 3,
+    "Blueberry Jam": 1,
+    "Fermented Carrots": 1
     "Sauerkraut": 10,
-    // "Fermented Fish": 3,
-    // "Power Smoothie": 3,
-    // "Blueberry Jam": 1,
-    // "Fermented Carrots": 1
   }
 }
 // 自动化卖货
@@ -198,16 +200,16 @@ const autoPlaying = async (status, cb, token) => {
   console.log(status)
   const {state, farmId, transactionId} = status;
   // console.log(status)
-  const isClaimTradeRound = await ACTIONS.doClaimTrade(state, cb);
-  if(isClaimTradeRound) {
-    console.log('isClaimTradeRound');
-    return false;
-  }
-  const isListingTradeRound = await ACTIONS.doListingTrade(state, cb, farmId, token, transactionId);
-  if(isListingTradeRound) {
-    console.log('isListingTradeRound');
-    return false;
-  }
+  // const isClaimTradeRound = await ACTIONS.doClaimTrade(state, cb);
+  // if(isClaimTradeRound) {
+  //   console.log('isClaimTradeRound');
+  //   return false;
+  // }
+  // const isListingTradeRound = await ACTIONS.doListingTrade(state, cb, farmId, token, transactionId);
+  // if(isListingTradeRound) {
+  //   console.log('isListingTradeRound');
+  //   return false;
+  // }
   // console.log('notTradeRound')
   const crops = computeCrop(state);
   const fruits = computeFruit(state);
