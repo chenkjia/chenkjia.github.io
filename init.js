@@ -67,7 +67,7 @@ const foodBuildings = {
     "Fermented Fish": 3,
     "Power Smoothie": 3,
     "Blueberry Jam": 1,
-    "Fermented Carrots": 1
+    "Fermented Carrots": 1,
     "Sauerkraut": 10,
   }
 }
