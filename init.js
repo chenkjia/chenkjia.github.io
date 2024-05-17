@@ -58,6 +58,7 @@ const foodBuildings = {
     "Kale & Mushroom Pie": 1
   },
   "Smoothie Shack": {
+    "Power Smoothie": 3,
     "Banana Blast": 2,
     "Bumpkin Detox": 3,
     "Apple Juice": 3,
@@ -65,7 +66,6 @@ const foodBuildings = {
   },
   "Deli": {
     "Fermented Fish": 3,
-    "Power Smoothie": 3,
     "Blueberry Jam": 1,
     "Fermented Carrots": 1,
     "Sauerkraut": 10,
