@@ -54,7 +54,7 @@ const foodBuildings = {
     "Bumpkin ganoush": 1
   },
   "Bakery": {
-    "Honey Cake": 1,
+    // "Honey Cake": 1,
     "Kale & Mushroom Pie": 1
   },
   "Smoothie Shack": {
@@ -154,13 +154,43 @@ const goods = {
   "Egg": {
     cost: 5,
     per: 5,
+  },
+  "Honey": {
+    cost: 1,
+    per: 1,
+    keep: 1
+  },
+  "Wood": {
+    cost: 1,
+    per: 20,
+    keep: 200
+  },
+  "Stone": {
+    cost: 1,
+    per: 5,
+    keep: 100
+  },
+  "Iron": {
+    cost: 1,
+    per: 2,
+    keep: 50
+  },
+  "Gold": {
+    cost: 1,
+    per: 1,
+    keep: 20
+  },
+  "Crimstone": {
+    cost: 1,
+    per: 1,
+    keep: 5
   }
 }
 const goodsKey = Object.keys(goods)
 goodsKey.forEach(good => {
   goods[good].costSFL = goods[good].cost / 320
-  goods[good].keep = goods[good].per * 20
-  goods[good].stokeLimit = goods[good].per * 10
+  goods[good].keep =  goods[good].keep || goods[good].per * 20
+  goods[good].stokeLimit = goods[good].stokeLimit || goods[good].per * 10
 
 })
 console.log(goods)
@@ -200,17 +230,20 @@ const autoPlaying = async (status, cb, token) => {
   console.log(status)
   const {state, farmId, transactionId} = status;
   // console.log(status)
-  // const isClaimTradeRound = await ACTIONS.doClaimTrade(state, cb);
-  // if(isClaimTradeRound) {
-  //   console.log('isClaimTradeRound');
-  //   return false;
-  // }
-  // const isListingTradeRound = await ACTIONS.doListingTrade(state, cb, farmId, token, transactionId);
-  // if(isListingTradeRound) {
-  //   console.log('isListingTradeRound');
-  //   return false;
-  // }
-  // console.log('notTradeRound')
+  if(getNumber(state.inventory["Clash of Factions Banner"])>=1){
+    const isClaimTradeRound = await ACTIONS.doClaimTrade(state, cb);
+    if(isClaimTradeRound) {
+      console.log('isClaimTradeRound');
+      return false;
+    }
+    const isListingTradeRound = await ACTIONS.doListingTrade(state, cb, farmId, token, transactionId);
+    if(isListingTradeRound) {
+      console.log('isListingTradeRound');
+      return false;
+    }
+    console.log('notTradeRound')
+
+  }
   const crops = computeCrop(state);
   const fruits = computeFruit(state);
   if(crops.length || fruits.length) {
@@ -602,7 +635,7 @@ const ACTIONS = {
   // 自动卖货
   doListingTrade: async (state, cb, farmId, token, transactionId)  => {
     const ks = Object.keys(state.trades.listings)
-    if(ks.length>=1) {
+    if(ks.length>=3) {
       return false
     }
     const sells = ks.map(k => Object.keys(state.trades.listings[k].items)[0])
@@ -623,6 +656,7 @@ const ACTIONS = {
       good.premium = (good.floorPrice - good.currentPrice) / good.currentPrice
       good.inventory = getNumber(state.inventory[i])
       good.rate = (good.inventory - good.keep) / good.keep
+      console.log(good)
     })
     const resultGoods = tmpGoods.filter((good) => {
       return goods[good].profit > 0 && goods[good].premium > 0
