@@ -9,6 +9,7 @@ const stringToAdd = `// clearTransactionId
 // BoundaryError
 // ClockIssue
 // Zt.send("REFRESH");
+// const{gameService:Bt}=reactExports.useContext(Context),{t:Wt}=useAppTranslation();function Zt(){acknowledgeGameRules(),Bt.send("ACKNOWLEDGE")};Zt();
 
 // 种菜的优先顺序
 const cropConfig = ['Soybean','Corn','Kale','Radish','Eggplant','Parsnip','Cauliflower','Beetroot','Cabbage','Carrot','Pumpkin','Potato','Sunflower','Wheat']
@@ -226,8 +227,8 @@ const DeliveryMan = {
 let times = 0
 const autoPlaying = async (status, cb, token) => {
   times++;
-  await ACTIONS.doAirdropClaimed(state, cb);
   const {state, farmId, transactionId} = status;
+  await ACTIONS.doAirdropClaimed(state, cb);
   // console.log(status)
   if(getNumber(state.inventory["Clash of Factions Banner"])>=1){
     const isClaimTradeRound = await ACTIONS.doClaimTrade(state, cb);
@@ -951,6 +952,7 @@ content = content.replace(/clearTransactionId",invoke:{src:Wt=>Zt=>{/g, 'clearTr
 content = content.replace(/listed:{on:{CONTINUE:"playing"}}/g, 'listed:{on:{CONTINUE:"playing"},invoke:{src:()=>(cb)=>cb("CONTINUE")}}');
 content = content.replace(/Sr=\(\)=>{Zt\.send\("REFRESH"\)};/g, 'Sr=()=>{Zt.send("REFRESH")};Zt.send("REFRESH");');
 content = content.replace(/ClockIssue=\(\)=>{/g, 'ClockIssue=()=>{Zt.send("REFRESH");');
+content = content.replace(/const{gameService:Bt}=reactExports\.useContext\(Context\),{t:Wt}=useAppTranslation\(\);function Zt\(\){acknowledgeGameRules\(\),Bt\.send\("ACKNOWLEDGE"\)};/g, 'const{gameService:Bt}=reactExports.useContext(Context),{t:Wt}=useAppTranslation();function Zt(){acknowledgeGameRules(),Bt.send("ACKNOWLEDGE")};Zt();');
 
 const newContent = stringToAdd + content;
 // 写回文件
