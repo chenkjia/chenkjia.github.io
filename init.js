@@ -17,7 +17,7 @@ const cropCate = {
   'Scary Mike': ['Soybean','Carrot','Cabbage','Beetroot','Cauliflower','Parsnip'],
   'Laurie the Chuckle Crow': ['Wheat','Eggplant','Corn','Radish','Kale'],
   'null': ['Soybean','Wheat','Eggplant','Corn','Radish','Kale'],
-  'all': ['Soybean','Corn','Kale','Radish','Eggplant','Parsnip','Cauliflower','Beetroot','Cabbage','Pumpkin','Wheat']
+  'all': ['Sunflower','Potato','Pumpkin','Soybean','Carrot','Cabbage','Beetroot','Cauliflower','Parsnip','Wheat','Eggplant','Corn','Radish','Kale']
 }
 const fruitSeeds = ['Blueberry Seed', 'Orange Seed', 'Apple Seed', 'Banana Plant']
 // 是否自动购买种子
@@ -32,7 +32,7 @@ const fruitSeeds = ['Blueberry Seed', 'Orange Seed', 'Apple Seed', 'Banana Plant
 // 是否自动采菇
 // 是否自动采蜜，采蜜的百分比
 // 做饭、做蛋糕、做饮料的优先顺序
-const compostBuildings = ['Compost Bin','Turbo Composter']
+const compostBuildings = ['Compost Bin','Turbo Composter','Premium Composter']
 const foodBuildings = {
   "Fire Pit": {
     "Reindeer Carrot": 5,
@@ -226,8 +226,7 @@ const DeliveryMan = {
 let times = 0
 const autoPlaying = async (status, cb, token) => {
   times++;
-  console.log(times)
-  console.log(status)
+  await ACTIONS.doAirdropClaimed(state, cb);
   const {state, farmId, transactionId} = status;
   // console.log(status)
   if(getNumber(state.inventory["Clash of Factions Banner"])>=1){
@@ -256,6 +255,24 @@ const autoPlaying = async (status, cb, token) => {
     return false;
   }
   await ACTIONS.doCook(state, cb)
+  // 买种子
+  await ACTIONS.doBuySeeds(state, cb);
+  // 收蜂蜜
+  await ACTIONS.doBeehive(state, cb);
+  // 种花
+  await ACTIONS.doPlantFlower(state, cb);
+  // 收花
+  await ACTIONS.doHarvestFlower(state, cb);
+  // 收蛋
+  await ACTIONS.doChickenCollectEgg(state, cb);
+  // 喂鸡
+  await ACTIONS.doChickenFed(state, cb);
+  // 买斧头
+  await ACTIONS.doBuyAxe(state, cb);
+  // 砍树
+  await ACTIONS.doTimberChopped(state, cb);
+
+
   // 判断是否无事可做，如果是，则完成任务、钓鱼
   await ACTIONS.doMushroomPicked(state, cb);
   // 做任务
@@ -388,6 +405,7 @@ const ACTIONS = {
     cropCateKey.forEach(key => {
       resultCropCate[key] = cropCate[key].concat(cropCate['all'])
     })
+    console.log(resultCropCate)
     // 计算目前仓库哪些物资最少
     for (let i = 0; i < crops.length; i++) {
       const crop = crops[i]
@@ -395,9 +413,12 @@ const ACTIONS = {
         await ACTIONS.doHarvested(cb, crop)
       }
       // find出现在仓库有的种子(列表后面需要考虑优先需求列表)
+      console.log(crop.ScarecrowType)
+      console.log(resultCropCate[crop.ScarecrowType])
       const vegetable = resultCropCate[crop.ScarecrowType].find(item => {
         return getNumber(state.inventory[item+' Seed']) || getNumber(state.stock[item+' Seed'])
       })
+      console.log(vegetable)
       const seed = vegetable +' Seed'
       if (!getNumber(state.inventory[seed])) {
         await ACTIONS.doBuySeed(state, cb, seed)
@@ -405,13 +426,29 @@ const ACTIONS = {
       await ACTIONS.doPlanted(state, cb, crop, seed, vegetable)
     }
   },
-  doBuySeed: async (state, cb, seed) => {
+  doBuySeeds: async (state, cb) => {
+    // const cropKey = Object.keys(cropCate.all)
+    const waitBuySeeds = cropCate.all.filter(item => {
+      return getNumber(state.stock[item+' Seed']) && getNumber(state.inventory[item+' Seed']) < 
+      goods[item].stokeLimit - 10
+    })
+    console.log(waitBuySeeds)
+    for (let i = 0; i < waitBuySeeds.length; i++) {
+      const item = waitBuySeeds[i]
+      const stockNum = getNumber(state.stock[item+' Seed'])
+      const emptyNum = goods[item].stokeLimit - getNumber(state.inventory[item+' Seed'])
+      const resultNum = emptyNum > stockNum ? stockNum : emptyNum
+      await ACTIONS.doBuySeed(state,cb,item+' Seed', resultNum)
+    }
+  },
+  doBuySeed: async (state, cb, seed, resultNum) => {
     await delayL(3)
     const stockNum = getNumber(state.stock[seed])
+    const num = resultNum || 10
     cb({
       type: "seed.bought",
       item: seed,
-      amount: stockNum >= 10 ? 10 : stockNum,
+      amount: stockNum >= num ? num : stockNum,
     });
   },
   doHarvested: async (cb, crop) => {
@@ -444,7 +481,14 @@ const ACTIONS = {
     }
   },
   doFertilised: async (state, cb, crop) => {
-    if(getNumber(state.inventory['Sprout Mix'])) {
+    if(getNumber(state.inventory['Rapid Root']) && cropCate['Laurie the Chuckle Crow'].includes(crop.crop.name)) {
+      await delayL(1)
+      cb({
+        type: "plot.fertilised",
+        plotID: crop.id,
+        fertiliser: "Rapid Root",
+      })
+    } else if(getNumber(state.inventory['Sprout Mix'])) {
       await delayL(1)
       cb({
         type: "plot.fertilised",
@@ -493,11 +537,11 @@ const ACTIONS = {
       selectedItem: "Axe",
     })
   },
-  doAxeCrafted: async (state, cb) => {
+  doAxeCrafted: async (state, cb, num) => {
     await delayL(3)
     cb({
       type: "tool.crafted",
-      amount: 10,
+      amount: num || 10,
       tool: "Axe",
     })
   },
@@ -656,7 +700,6 @@ const ACTIONS = {
       good.premium = (good.floorPrice - good.currentPrice) / good.currentPrice
       good.inventory = getNumber(state.inventory[i])
       good.rate = (good.inventory - good.keep) / good.keep
-      console.log(good)
     })
     const resultGoods = tmpGoods.filter((good) => {
       return goods[good].profit > 0 && goods[good].premium > 0
@@ -718,6 +761,116 @@ const ACTIONS = {
           });
         }
       })
+    }
+  },
+  doBeehive: async (state, cb) => {
+    const beehivesKeys = Object.keys(state.beehives)
+    const waitBeehive = beehivesKeys.filter(key => {
+      return state.beehives[key].honey.produced / DEFAULT_HONEY_PRODUCTION_TIME > 0.4
+    })
+    for (let i = 0; i < waitBeehive.length; i++) {
+      await delayL(3)
+      cb({
+        type: "beehive.harvested",
+        id: waitBeehive[i]
+      })
+    }
+  },
+  doPlantFlower: async (state, cb) => {
+    const flowerBedsKeys = Object.keys(state.flowers.flowerBeds)
+    const waitPlantFlower = flowerBedsKeys.filter(key => {
+      return !state.flowers.flowerBeds[key].flower
+    })
+    for (let i = 0; i < waitPlantFlower.length; i++) {
+      await delayL(3)
+      cb({
+        crossbreed: "Sunflower",
+        id: waitPlantFlower[i],
+        seed: "Sunpetal Seed",
+        type: "flower.planted"
+      })
+    }
+  },
+  doHarvestFlower: async (state, cb) => {
+    const now = new Date()
+    const flowerBedsKeys = Object.keys(state.flowers.flowerBeds)
+    const waitHarvestFlower = flowerBedsKeys.filter(key => {
+      return state.flowers.flowerBeds[key].flower && state.flowers.flowerBeds[key].flower.plantedAt < now - 86400000
+    })
+    for (let i = 0; i < waitHarvestFlower.length; i++) {
+      await delayL(3)
+      cb({
+        id: waitHarvestFlower[i],
+        type: "flower.harvested"
+      })
+    }
+  },
+  doChickenCollectEgg: async (state, cb) => {
+    const now = new Date()
+    const chickensKeys = Object.keys(state.chickens)
+    const waitChickens = chickensKeys.filter(key => {
+      return state.chickens[key].fedAt + 2*86400000 < now
+    })
+    for (let i = 0; i < waitChickens.length; i++) {
+      await delayL(3)
+      cb({
+        id: waitChickens[i],
+        type: "chicken.collectEgg"
+      })
+    }
+  },
+  doChickenFed: async (state, cb) => {
+    const chickensKeys = Object.keys(state.chickens)
+    const waitChickens = chickensKeys.filter(key => {
+      return !state.chickens[key].fedAt
+    })
+    if(getNumber(state.inventory['Wheat']) > waitChickens.length) {
+      for (let i = 0; i < waitChickens.length; i++) {
+        await delayL(3)
+        cb({
+          id: waitChickens[i],
+          type: "chicken.fed"
+        })
+      }
+    }
+  },
+  
+  doTimberChopped: async (state, cb) => {
+    if (getNumber(state.inventory['Axe']) > 50) {
+      const now = new Date()
+      const treesKeys = Object.keys(state.trees)
+      const waitTrees = treesKeys.filter(key => {
+        return state.trees[key].wood && state.trees[key].wood.choppedAt + 2*3600000 < now
+      })
+      for (let i = 0; i < waitTrees.length; i++) {
+        await delayL(3)
+        cb({
+          type: "timber.chopped",
+          item: "Axe",
+          index: waitTrees[i],
+        })
+      }
+
+    }
+    // timber.chopped
+  },
+  doBuyAxe: async (state, cb) => {
+    if(state.coins > 20000) {
+      const stockAxe = getNumber(state.stock['Axe'])
+      if (stockAxe) {
+        await ACTIONS.doAxeCrafted(state, cb) 
+      }
+    }
+  },
+  doAirdropClaimed: async (state, cb) => {
+    if(state.airdrops.length) {
+      for (let i = 0; i < state.airdrops.length; i++) {
+        await delayL(3)
+        cb({
+          type: "airdrop.claimed",
+          id: state.airdrops[i].id,
+        })
+      }
     }
   },
   doChores: async (state, cb) => {
