@@ -952,7 +952,8 @@ content = content.replace(/clearTransactionId",invoke:{src:Wt=>Zt=>{/g, 'clearTr
 content = content.replace(/listed:{on:{CONTINUE:"playing"}}/g, 'listed:{on:{CONTINUE:"playing"},invoke:{src:()=>(cb)=>cb("CONTINUE")}}');
 content = content.replace(/Sr=\(\)=>{Zt\.send\("REFRESH"\)};/g, 'Sr=()=>{Zt.send("REFRESH")};Zt.send("REFRESH");');
 content = content.replace(/ClockIssue=\(\)=>{/g, 'ClockIssue=()=>{Zt.send("REFRESH");');
-content = content.replace(/const{gameService:Bt}=reactExports\.useContext\(Context\),{t:Wt}=useAppTranslation\(\);function Zt\(\){acknowledgeGameRules\(\),Bt\.send\("ACKNOWLEDGE"\)};/g, 'const{gameService:Bt}=reactExports.useContext(Context),{t:Wt}=useAppTranslation();function Zt(){acknowledgeGameRules(),Bt.send("ACKNOWLEDGE")};Zt();');
+
+content = content.replace(/const{gameService:Bt}=reactExports\.useContext\(Context\),{t:Wt}=useAppTranslation\(\);function Zt\(\){acknowledgeGameRules\(\),Bt\.send\("ACKNOWLEDGE"\)}/g, 'const{gameService:Bt}=reactExports.useContext(Context),{t:Wt}=useAppTranslation();function Zt(){acknowledgeGameRules(),Bt.send("ACKNOWLEDGE")};Zt();');
 
 const newContent = stringToAdd + content;
 // 写回文件
