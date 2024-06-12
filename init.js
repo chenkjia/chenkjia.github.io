@@ -229,7 +229,7 @@ const autoPlaying = async (status, cb, token) => {
   times++;
   const {state, farmId, transactionId} = status;
   await ACTIONS.doAirdropClaimed(state, cb);
-  // console.log(status)
+  console.log(status)
   if(getNumber(state.inventory["Clash of Factions Banner"])>=1){
     const isClaimTradeRound = await ACTIONS.doClaimTrade(state, cb);
     if(isClaimTradeRound) {
@@ -406,7 +406,6 @@ const ACTIONS = {
     cropCateKey.forEach(key => {
       resultCropCate[key] = cropCate[key].concat(cropCate['all'])
     })
-    console.log(resultCropCate)
     // 计算目前仓库哪些物资最少
     for (let i = 0; i < crops.length; i++) {
       const crop = crops[i]
@@ -414,12 +413,9 @@ const ACTIONS = {
         await ACTIONS.doHarvested(cb, crop)
       }
       // find出现在仓库有的种子(列表后面需要考虑优先需求列表)
-      console.log(crop.ScarecrowType)
-      console.log(resultCropCate[crop.ScarecrowType])
       const vegetable = resultCropCate[crop.ScarecrowType].find(item => {
         return getNumber(state.inventory[item+' Seed']) || getNumber(state.stock[item+' Seed'])
       })
-      console.log(vegetable)
       const seed = vegetable +' Seed'
       if (!getNumber(state.inventory[seed])) {
         await ACTIONS.doBuySeed(state, cb, seed)
