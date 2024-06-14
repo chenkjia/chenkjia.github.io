@@ -781,7 +781,7 @@ const ACTIONS = {
     for (let i = 0; i < waitPlantFlower.length; i++) {
       await delayL(3)
       cb({
-        crossbreed: "Cabbage",
+        crossbreed: "Sunflower",
         id: waitPlantFlower[i],
         seed: "Sunpetal Seed",
         type: "flower.planted"
