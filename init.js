@@ -762,9 +762,13 @@ const ACTIONS = {
   },
   doBeehive: async (state, cb) => {
     const beehivesKeys = Object.keys(state.beehives)
+    const now = Date.now()
+
     const waitBeehive = beehivesKeys.filter(key => {
-      return state.beehives[key].honey.produced / DEFAULT_HONEY_PRODUCTION_TIME > 0.4
+      console.log(state.beehives[key].honey.produced / DEFAULT_HONEY_PRODUCTION_TIME)
+      return state.beehives[key].honey.produced / DEFAULT_HONEY_PRODUCTION_TIME > 0.1
     })
+    console.log(waitBeehive)
     for (let i = 0; i < waitBeehive.length; i++) {
       await delayL(3)
       cb({
