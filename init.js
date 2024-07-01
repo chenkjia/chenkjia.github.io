@@ -77,6 +77,7 @@ const goods = {
   "Sunflower": {
     cost: 0.01,
     per: 100,
+    crossbreed: 50
   },
   "Potato": {
     cost: 0.1,
@@ -101,20 +102,24 @@ const goods = {
   "Beetroot": {
     cost: 2,
     per: 22,
+    crossbreed: 10
   },
   "Cauliflower": {
     cost: 3,
     per: 20,
+    crossbreed: 5
   },
   "Parsnip": {
     cost: 5,
     per: 15,
-    mix: true
+    mix: true,
+    crossbreed: 5
   },
   "Eggplant": {
     cost: 6,
     per: 12,
-    mix: true
+    mix: true,
+    crossbreed: 5
   },
   "Corn": {
     cost: 7,
@@ -124,7 +129,8 @@ const goods = {
   "Radish": {
     cost: 7,
     per: 10,
-    mix: true
+    mix: true,
+    crossbreed: 5
   },
   "Wheat": {
     cost: 5,
@@ -134,7 +140,8 @@ const goods = {
   "Kale": {
     cost: 7,
     per: 8,
-    mix: true
+    mix: true,
+    crossbreed: 5
   },
   "Blueberry": {
     cost: 6,
@@ -194,7 +201,7 @@ goodsKey.forEach(good => {
   goods[good].stokeLimit = goods[good].stokeLimit || goods[good].per * 10
 
 })
-console.log(goods)
+const crossbreeds = goodsKey.filter(good => goods[good].crossbreed)
 // 自动化任务
 // 通过任务与厨房、地、鸡、水果的状态、仓库与商店，计算出需求列表
 
@@ -260,10 +267,10 @@ const autoPlaying = async (status, cb, token) => {
   await ACTIONS.doBuySeeds(state, cb);
   // 收蜂蜜
   await ACTIONS.doBeehive(state, cb);
-  // 种花
-  await ACTIONS.doPlantFlower(state, cb);
   // 收花
   await ACTIONS.doHarvestFlower(state, cb);
+  // 种花
+  await ACTIONS.doPlantFlower(state, cb);
   // 收蛋
   await ACTIONS.doChickenCollectEgg(state, cb);
   // 喂鸡
@@ -782,10 +789,11 @@ const ACTIONS = {
     const waitPlantFlower = flowerBedsKeys.filter(key => {
       return !state.flowers.flowerBeds[key].flower
     })
+    const crossbreed = crossbreeds.find(good => state.inventory[good] > goods[good].crossbreed)
     for (let i = 0; i < waitPlantFlower.length; i++) {
       await delayL(3)
       cb({
-        crossbreed: "Sunflower",
+        crossbreed,
         id: waitPlantFlower[i],
         seed: "Sunpetal Seed",
         type: "flower.planted"
