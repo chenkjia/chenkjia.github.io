@@ -237,20 +237,20 @@ const autoPlaying = async (status, cb, token) => {
   const {state, farmId, transactionId} = status;
   await ACTIONS.doAirdropClaimed(state, cb);
   console.log(status)
-  if(getNumber(state.inventory["Clash of Factions Banner"])>=1){
-    const isClaimTradeRound = await ACTIONS.doClaimTrade(state, cb);
-    if(isClaimTradeRound) {
-      console.log('isClaimTradeRound');
-      return false;
-    }
-    const isListingTradeRound = await ACTIONS.doListingTrade(state, cb, farmId, token, transactionId);
-    if(isListingTradeRound) {
-      console.log('isListingTradeRound');
-      return false;
-    }
-    console.log('notTradeRound')
+  // if(getNumber(state.inventory["Clash of Factions Banner"])>=1){
+  //   const isClaimTradeRound = await ACTIONS.doClaimTrade(state, cb);
+  //   if(isClaimTradeRound) {
+  //     console.log('isClaimTradeRound');
+  //     return false;
+  //   }
+  //   const isListingTradeRound = await ACTIONS.doListingTrade(state, cb, farmId, token, transactionId);
+  //   if(isListingTradeRound) {
+  //     console.log('isListingTradeRound');
+  //     return false;
+  //   }
+  //   console.log('notTradeRound')
 
-  }
+  // }
   const crops = computeCrop(state);
   const fruits = computeFruit(state);
   if(crops.length || fruits.length) {
