@@ -77,120 +77,145 @@ const goods = {
   "Sunflower": {
     cost: 0.01,
     per: 100,
+    min: 200,
     crossbreed: 50
   },
   "Potato": {
     cost: 0.1,
     per: 50,
+    min: 200,
   },
   "Pumpkin": {
     cost: 0.2,
     per: 40,
+    min: 100,
   },
   "Carrot": {
     cost: 0.5,
     per: 25,
+    min: 100,
   },
   "Cabbage": {
     cost: 1,
     per: 24,
+    min: 100,
   },
   "Soybean": {
     cost: 1.5,
     per: 24,
+    min: 50,
   },
   "Beetroot": {
     cost: 2,
     per: 22,
+    min: 50,
     crossbreed: 10
   },
   "Cauliflower": {
     cost: 3,
     per: 20,
+    min: 50,
     crossbreed: 5
   },
   "Parsnip": {
     cost: 5,
     per: 15,
     mix: true,
+    min: 20,
     crossbreed: 5
   },
   "Eggplant": {
     cost: 6,
     per: 12,
     mix: true,
+    min: 20,
     crossbreed: 5
   },
   "Corn": {
     cost: 7,
     per: 12,
+    min: 20,
     mix: true
   },
   "Radish": {
     cost: 7,
     per: 10,
     mix: true,
+    min: 10,
     crossbreed: 5
   },
   "Wheat": {
     cost: 5,
     per: 10,
+    min: 10,
     mix: true
   },
   "Kale": {
     cost: 7,
     per: 8,
     mix: true,
+    min: 10,
     crossbreed: 5
   },
   "Blueberry": {
     cost: 6,
     per: 4,
+    min: 5,
   },
   "Orange": {
     cost: 1,
     per: 3,
+    min: 5,
   },
   "Apple": {
     cost: 14,
     per: 2,
+    min: 5,
   },
   "Banana": {
     cost: 14,
     per: 2,
+    min: 5,
   },
   "Egg": {
     cost: 5,
     per: 5,
+    min: 10,
   },
   "Honey": {
     cost: 1,
     per: 1,
-    keep: 1
+    keep: 1,
+    min: 5,
   },
   "Wood": {
     cost: 1,
     per: 20,
+    min: 50,
     keep: 200
   },
   "Stone": {
     cost: 1,
     per: 5,
+    min: 10,
     keep: 100
   },
   "Iron": {
     cost: 1,
     per: 2,
+    min: 5,
     keep: 50
   },
   "Gold": {
     cost: 1,
     per: 1,
+    min: 3,
     keep: 20
   },
   "Crimstone": {
     cost: 1,
     per: 1,
+    min: 1,
     keep: 5
   }
 }
@@ -237,20 +262,17 @@ const autoPlaying = async (status, cb, token) => {
   const {state, farmId, transactionId} = status;
   await ACTIONS.doAirdropClaimed(state, cb);
   console.log(status)
-  // if(getNumber(state.inventory["Clash of Factions Banner"])>=1){
-  //   const isClaimTradeRound = await ACTIONS.doClaimTrade(state, cb);
-  //   if(isClaimTradeRound) {
-  //     console.log('isClaimTradeRound');
-  //     return false;
-  //   }
-  //   const isListingTradeRound = await ACTIONS.doListingTrade(state, cb, farmId, token, transactionId);
-  //   if(isListingTradeRound) {
-  //     console.log('isListingTradeRound');
-  //     return false;
-  //   }
-  //   console.log('notTradeRound')
-
-  // }
+  const isClaimTradeRound = await ACTIONS.doClaimTrade(state, cb);
+  if(isClaimTradeRound) {
+    console.log('isClaimTradeRound');
+    return false;
+  }
+  const isListingTradeRound = await ACTIONS.doListingTrade(state, cb, farmId, token, transactionId);
+  if(isListingTradeRound) {
+    console.log('isListingTradeRound');
+    return false;
+  }
+  console.log('notTradeRound')
   const crops = computeCrop(state);
   const fruits = computeFruit(state);
   if(crops.length || fruits.length) {
@@ -686,6 +708,9 @@ const ACTIONS = {
     if(ks.length>=3) {
       return false
     }
+    if(!getNumber(state.inventory["Clash of Factions Banner"]) && ks.length>=1) {
+      return false
+    }
     const sells = ks.map(k => Object.keys(state.trades.listings[k].items)[0])
 
     const tmpGoods = goodsKey.filter((good) => {
@@ -719,12 +744,12 @@ const ACTIONS = {
       token
     );
     const targetPrice = listings[3].sfl / listings[3].items[resultGoods[0]]
-    const sfl = Number((targetPrice * resource.per - 0.0001).toFixed(4))
+    const sfl = Number((targetPrice * resource.min - 0.0001).toFixed(4))
     cb({
       type: "LIST_TRADE",
       sellerId: farmId,
       items: {
-        [resultGoods[0]]: resource.per
+        [resultGoods[0]]: resource.min
       },
       sfl
     });
