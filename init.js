@@ -21,6 +21,7 @@ const cropCate = {
   'all': ['Sunflower','Potato','Pumpkin','Soybean','Carrot','Cabbage','Beetroot','Cauliflower','Parsnip','Wheat','Eggplant','Corn','Radish','Kale']
 }
 const fruitSeeds = ['Blueberry Seed', 'Orange Seed', 'Apple Seed', 'Banana Plant']
+const flowerSeeds = ['Sunpetal Seed', 'Bloom Seed', 'Lily Seed']
 // 是否自动购买种子
 // 是否自动砍树
 // 是否自动挖石
@@ -454,7 +455,7 @@ const ACTIONS = {
   },
   doBuySeeds: async (state, cb) => {
     // const cropKey = Object.keys(cropCate.all)
-    const waitBuySeeds = cropCate.all.filter(item => {
+    const waitBuySeeds = cropCate.all.concat(['Blueberry','Orange','Apple']).filter(item => {
       return getNumber(state.stock[item+' Seed']) && getNumber(state.inventory[item+' Seed']) < 
       goods[item].stokeLimit - 10
     })
@@ -815,12 +816,13 @@ const ACTIONS = {
       return !state.flowers.flowerBeds[key].flower
     })
     const crossbreed = crossbreeds.find(good => state.inventory[good] > goods[good].crossbreed)
+    const seeds = flowerSeeds.sort((a,b) => state.inventory[b] - state.inventory[a])
     for (let i = 0; i < waitPlantFlower.length; i++) {
       await delayL(3)
       cb({
         crossbreed,
         id: waitPlantFlower[i],
-        seed: "Sunpetal Seed",
+        seed: seeds[0],
         type: "flower.planted"
       })
     }
