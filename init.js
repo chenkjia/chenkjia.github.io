@@ -218,6 +218,21 @@ const goods = {
     per: 1,
     min: 1,
     keep: 5
+  },'Sunpetal': {
+    cost: 1,
+    per: 4,
+    min: 1,
+    keep: 5
+  }, 'Bloom': {
+    cost: 1,
+    per: 2,
+    min: 1,
+    keep: 5
+  }, 'Lily': {
+    cost: 1,
+    per: 1,
+    min: 1,
+    keep: 5
   }
 }
 const goodsKey = Object.keys(goods)
@@ -455,7 +470,7 @@ const ACTIONS = {
   },
   doBuySeeds: async (state, cb) => {
     // const cropKey = Object.keys(cropCate.all)
-    const waitBuySeeds = cropCate.all.concat(['Blueberry','Orange','Apple']).filter(item => {
+    const waitBuySeeds = cropCate.all.concat(['Blueberry','Orange','Apple','Sunpetal', 'Bloom', 'Lily']).filter(item => {
       return getNumber(state.stock[item+' Seed']) && getNumber(state.inventory[item+' Seed']) < 
       goods[item].stokeLimit - 10
     })
