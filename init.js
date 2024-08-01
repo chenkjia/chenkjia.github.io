@@ -58,7 +58,9 @@ const foodBuildings = {
     "Bumpkin Roast": 3,
     "Roast Veggies": 5,
     "Bumpkin Salad": 3,
-    "Bumpkin ganoush": 1
+    "Bumpkin ganoush": 1,
+    "Goblin's Treat": 3,
+    "Goblin Brunch": 1
   },
   "Bakery": {
     // "Honey Cake": 1,
