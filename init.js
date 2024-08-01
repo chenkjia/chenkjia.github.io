@@ -22,6 +22,11 @@ const cropCate = {
 }
 const fruitSeeds = ['Blueberry Seed', 'Orange Seed', 'Apple Seed', 'Banana Plant']
 const flowerSeeds = ['Sunpetal Seed', 'Bloom Seed', 'Lily Seed']
+const harvestFlowerTime = {
+  'Sunpetal Seed': 86400000,
+  'Bloom Seed': 86400000 * 2,
+  'Lily Seed': 86400000 * 4
+}
 // 是否自动购买种子
 // 是否自动砍树
 // 是否自动挖石
@@ -254,9 +259,9 @@ const DeliveryMan = {
   blacksmith: {
     // friendship: true
   },
-  "pumpkin' pete": {
-  //   friendship: true
-  },
+  // "pumpkin' pete": {
+  // //   friendship: true
+  // },
   grimbly: {
     friendship: true
   },
@@ -276,19 +281,20 @@ let times = 0
 const autoPlaying = async (status, cb, token) => {
   times++;
   const {state, farmId, transactionId} = status;
+  console.log(state)
   await ACTIONS.doAirdropClaimed(state, cb);
-  console.log(status)
-  const isClaimTradeRound = await ACTIONS.doClaimTrade(state, cb);
-  if(isClaimTradeRound) {
-    console.log('isClaimTradeRound');
-    return false;
-  }
-  const isListingTradeRound = await ACTIONS.doListingTrade(state, cb, farmId, token, transactionId);
-  if(isListingTradeRound) {
-    console.log('isListingTradeRound');
-    return false;
-  }
-  console.log('notTradeRound')
+  // console.log(status)
+  // const isClaimTradeRound = await ACTIONS.doClaimTrade(state, cb);
+  // if(isClaimTradeRound) {
+  //   console.log('isClaimTradeRound');
+  //   return false;
+  // }
+  // const isListingTradeRound = await ACTIONS.doListingTrade(state, cb, farmId, token, transactionId);
+  // if(isListingTradeRound) {
+  //   console.log('isListingTradeRound');
+  //   return false;
+  // }
+  // console.log('notTradeRound')
   const crops = computeCrop(state);
   const fruits = computeFruit(state);
   if(crops.length || fruits.length) {
@@ -317,12 +323,10 @@ const autoPlaying = async (status, cb, token) => {
   await ACTIONS.doBuyAxe(state, cb);
   // 砍树
   await ACTIONS.doTimberChopped(state, cb);
-
-
-  // 判断是否无事可做，如果是，则完成任务、钓鱼
-  await ACTIONS.doMushroomPicked(state, cb);
   // 做任务
   await ACTIONS.doOrders(state, cb);
+  // 判断是否无事可做，如果是，则完成任务、钓鱼
+  await ACTIONS.doMushroomPicked(state, cb);
   // 做任务
   await ACTIONS.doChores(state, cb);
 };
@@ -470,7 +474,7 @@ const ACTIONS = {
   },
   doBuySeeds: async (state, cb) => {
     // const cropKey = Object.keys(cropCate.all)
-    const waitBuySeeds = cropCate.all.concat(['Blueberry','Orange','Apple','Sunpetal', 'Bloom', 'Lily']).filter(item => {
+    const waitBuySeeds = cropCate.all.concat(['Blueberry','Orange','Apple','Sunpetal']).filter(item => {
       return getNumber(state.stock[item+' Seed']) && getNumber(state.inventory[item+' Seed']) < 
       goods[item].stokeLimit - 10
     })
@@ -773,15 +777,18 @@ const ACTIONS = {
     // return false
   },
   doOrders: async (state, cb) => {
+    console.log('doOrders')
     const orders = state.delivery.orders.filter(order => {
       return DeliveryMan[order.from] && !order.completedAt
     })
+    console.log(orders)
     if (orders.length) {
       const now = Date.now()
       orders.forEach(async order => {
         const canDelivered = Object.keys(order.items).every(key => {
           return getNumber(state.inventory[key]) >= order.items[key]
         })
+        console.log(canDelivered)
         if(canDelivered) {
           await delayL(3);
           let result = {
@@ -813,10 +820,8 @@ const ACTIONS = {
     const now = Date.now()
 
     const waitBeehive = beehivesKeys.filter(key => {
-      console.log(state.beehives[key].honey.produced / DEFAULT_HONEY_PRODUCTION_TIME)
       return state.beehives[key].honey.produced / DEFAULT_HONEY_PRODUCTION_TIME > 0.1
     })
-    console.log(waitBeehive)
     for (let i = 0; i < waitBeehive.length; i++) {
       await delayL(3)
       cb({
@@ -846,7 +851,8 @@ const ACTIONS = {
     const now = new Date()
     const flowerBedsKeys = Object.keys(state.flowers.flowerBeds)
     const waitHarvestFlower = flowerBedsKeys.filter(key => {
-      return state.flowers.flowerBeds[key].flower && state.flowers.flowerBeds[key].flower.plantedAt < now - 86400000
+      const harvestTime = harvestFlowerTime[FLOWERS[state.flowers.flowerBeds[key].flower.name].seed]
+      return state.flowers.flowerBeds[key].flower && state.flowers.flowerBeds[key].flower.plantedAt < now - harvestTime
     })
     for (let i = 0; i < waitHarvestFlower.length; i++) {
       await delayL(3)
