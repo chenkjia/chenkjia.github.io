@@ -853,8 +853,11 @@ const ACTIONS = {
     const now = new Date()
     const flowerBedsKeys = Object.keys(state.flowers.flowerBeds)
     const waitHarvestFlower = flowerBedsKeys.filter(key => {
+      if (!state.flowers.flowerBeds[key].flower) {
+        return false
+      }
       const harvestTime = harvestFlowerTime[FLOWERS[state.flowers.flowerBeds[key].flower.name].seed]
-      return state.flowers.flowerBeds[key].flower && state.flowers.flowerBeds[key].flower.plantedAt < now - harvestTime
+      return state.flowers.flowerBeds[key].flower.plantedAt < now - harvestTime
     })
     for (let i = 0; i < waitHarvestFlower.length; i++) {
       await delayL(3)
