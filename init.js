@@ -330,7 +330,7 @@ const autoPlaying = async (status, cb, token) => {
   // 判断是否无事可做，如果是，则完成任务、钓鱼
   await ACTIONS.doMushroomPicked(state, cb);
   // 做任务
-  await ACTIONS.doChores(state, cb);
+  // await ACTIONS.doChores(state, cb);
 };
 // computeCrop
 const computeCrop = (state) => {
