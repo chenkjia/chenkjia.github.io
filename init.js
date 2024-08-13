@@ -105,7 +105,7 @@ const cropCate = {
   'null': ['Soybean','Wheat','Eggplant','Corn','Radish','Kale'],
   'all': ['Sunflower','Potato','Pumpkin','Soybean','Carrot','Cabbage','Beetroot','Cauliflower','Parsnip','Wheat','Eggplant','Corn','Radish','Kale']
 }
-const fruitSeeds = ['Blueberry Seed', 'Orange Seed', 'Apple Seed', 'Banana Plant']
+const fruitSeeds = ['Tomato Seed', 'Lemon Seed', 'Blueberry Seed', 'Orange Seed', 'Apple Seed', 'Banana Plant']
 const flowerSeeds = ['Sunpetal Seed', 'Bloom Seed', 'Lily Seed']
 const harvestFlowerTime = {
   'Sunpetal Seed': 86400000,
@@ -249,6 +249,17 @@ const goods = {
     mix: true,
     min: 10,
     crossbreed: 5
+  },
+  "Tomato": {
+    cost: 6,
+    per: 4,
+    min: 5,
+  },
+  },
+  "Lemon": {
+    cost: 6,
+    per: 4,
+    min: 5,
   },
   "Blueberry": {
     cost: 6,
@@ -421,7 +432,6 @@ const autoPlaying = async (status, cb, token) => {
 const computeCrop = (state) => {
   const now = Date.now()
   const {collectibles, crops} = state;
-  const CROPSDETAIL = CROPS()
   // 循环所有的地，判断是否在120秒内可收获，
   const waitForCrop = Object.keys(crops).reduce((result, key) => {
     let harvestTime = null
@@ -561,7 +571,7 @@ const ACTIONS = {
   },
   doBuySeeds: async (state, cb) => {
     // const cropKey = Object.keys(cropCate.all)
-    const waitBuySeeds = cropCate.all.concat(['Blueberry','Orange','Apple','Sunpetal']).filter(item => {
+    const waitBuySeeds = cropCate.all.concat(['Tomato','Lemon','Blueberry','Orange','Apple','Sunpetal']).filter(item => {
       return getNumber(state.stock[item+' Seed']) && getNumber(state.inventory[item+' Seed']) < 
       goods[item].stokeLimit - 10
     })
