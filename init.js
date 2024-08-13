@@ -255,7 +255,6 @@ const goods = {
     per: 4,
     min: 5,
   },
-  },
   "Lemon": {
     cost: 6,
     per: 4,
