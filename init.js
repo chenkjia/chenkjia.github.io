@@ -10,7 +10,92 @@ const stringToAdd = `// clearTransactionId
 // ClockIssue
 // Zt.send("REFRESH");
 // const{gameService:Bt}=reactExports.useContext(Context),{t:Wt}=useAppTranslation();function Zt(){acknowledgeGameRules(),Bt.send("ACKNOWLEDGE")};Zt();
-
+const CROPSDETAIL = {
+  Sunflower: {
+    name: "Sunflower",
+    sellPrice: 0.02,
+    bumpkinLevel: 1,
+    harvestSeconds: 1 * 60,
+  },
+  Potato: {
+    name: "Potato",
+    sellPrice: 0.14,
+    bumpkinLevel: 1,
+    harvestSeconds: 5 * 60,
+  },
+  Pumpkin: {
+    name: "Pumpkin",
+    sellPrice: 0.4,
+    bumpkinLevel: 3,
+    harvestSeconds: 30 * 60,
+  },
+  Carrot: {
+    name: "Carrot",
+    sellPrice: 0.8,
+    bumpkinLevel: 3,
+    harvestSeconds: 60 * 60,
+  },
+  Cabbage: {
+    name: "Cabbage",
+    sellPrice: 1.5,
+    bumpkinLevel: 3,
+    harvestSeconds: 2 * 60 * 60,
+  },
+  Soybean: {
+    sellPrice: 2.3,
+    harvestSeconds: 3 * 60 * 60,
+    name: "Soybean",
+    bumpkinLevel: 10,
+  },
+  Beetroot: {
+    name: "Beetroot",
+    sellPrice: 2.8,
+    bumpkinLevel: 3,
+    harvestSeconds: 4 * 60 * 60,
+  },
+  Cauliflower: {
+    name: "Cauliflower",
+    sellPrice: 4.25,
+    bumpkinLevel: 4,
+    harvestSeconds: 8 * 60 * 60,
+  },
+  Parsnip: {
+    name: "Parsnip",
+    sellPrice: 6.5,
+    bumpkinLevel: 4,
+    harvestSeconds: 12 * 60 * 60,
+  },
+  Eggplant: {
+    name: "Eggplant",
+    sellPrice: 8,
+    bumpkinLevel: 5,
+    harvestSeconds: 16 * 60 * 60,
+  },
+  Corn: {
+    name: "Corn",
+    sellPrice: 9,
+    bumpkinLevel: 5,
+    harvestSeconds: 20 * 60 * 60,
+  },
+  Radish: {
+    name: "Radish",
+    sellPrice: 9.5,
+    bumpkinLevel: 5,
+    harvestSeconds: 24 * 60 * 60,
+  },
+  Wheat: {
+    name: "Wheat",
+    sellPrice: 7,
+    bumpkinLevel: 5,
+    harvestSeconds: 24 * 60 * 60,
+  },
+  Kale: {
+    name: "Kale",
+    sellPrice: 10,
+    bumpkinLevel: 7,
+    harvestSeconds: 36 * 60 * 60,
+  },
+};
 // 种菜的优先顺序
 const cropConfig = ['Soybean','Corn','Kale','Radish','Eggplant','Parsnip','Cauliflower','Beetroot','Cabbage','Carrot','Pumpkin','Potato','Sunflower','Wheat']
 const cropCate = {
