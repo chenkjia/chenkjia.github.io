@@ -3,7 +3,7 @@ const fs = require('fs');
 const filePath = process.argv[2];
 
 const stringToAdd = `// clearTransactionId
-// autoPlaying(Wt,Zt,Bt.user.rawToken);
+// autoPlaying(dt,At,lt.user.rawToken);
 // listed:{on:{CONTINUE:"playing"}}
 // listed:{on:{CONTINUE:"playing"},invoke:{src:()=>(cb)=>cb('CONTINUE')}}
 // BoundaryError
