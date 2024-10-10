@@ -500,8 +500,8 @@ const computeCrop = (state) => {
 const computeFruit = (state) => {
   const now = Date.now()
   const {fruitPatches} = state;
-  const FRUITSEEDDETAIL = FRUIT_SEEDS()
-  const FRUITDETAIL = FRUIT()
+  const FRUITSEEDDETAIL = PATCH_FRUIT_SEEDS()
+  const FRUITDETAIL = PATCH_FRUIT()
   // 循环所有的地，判断是否在120秒内可收获，
   const waitForFruit = Object.keys(fruitPatches).reduce((result, key) => {
     let harvestTime = null
@@ -644,7 +644,7 @@ const ACTIONS = {
       const fruit = fruits[i]
       // 以库存最少的来种
       const tmpFruitSeeds =  fruitSeeds.sort((a,b) => {
-        return (state.inventory[FRUIT_SEEDS()[a].yield]||0) - (state.inventory[FRUIT_SEEDS()[b].yield]||0)
+        return (state.inventory[PATCH_FRUIT_SEEDS()[a].yield]||0) - (state.inventory[PATCH_FRUIT_SEEDS()[b].yield]||0)
       })
       if(fruit.fruit){
         if(fruit.fruit.harvestsLeft) {
