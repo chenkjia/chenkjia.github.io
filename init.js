@@ -412,10 +412,10 @@ const autoPlaying = async (status, cb, token) => {
   await ACTIONS.doHarvestFlower(state, cb);
   // 种花
   await ACTIONS.doPlantFlower(state, cb);
-  // 收蛋
-  await ACTIONS.doChickenCollectEgg(state, cb);
-  // 喂鸡
-  await ACTIONS.doChickenFed(state, cb);
+  // // 收蛋
+  // await ACTIONS.doChickenCollectEgg(state, cb);
+  // // 喂鸡
+  // await ACTIONS.doChickenFed(state, cb);
   // 买斧头
   await ACTIONS.doBuyAxe(state, cb);
   // 砍树
