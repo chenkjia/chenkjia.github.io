@@ -1103,7 +1103,7 @@ console.log(generateRandomString());\n`;
 let content = fs.readFileSync(filePath, 'utf-8');
 
 // 替换字符串
-content = content.replace(/clearTransactionId",invoke:{src:dt=>At=>{/g, 'clearTransactionId",invoke:{src:dt=>At=>{autoPlaying(dt,At,lt.user.rawToken);');
+content = content.replace(/clearTransactionId",invoke:{src:ga=>ba=>{/g, 'clearTransactionId",invoke:{src:ga=>ba=>{autoPlaying(ga,ba,lt.user.rawToken);');
 content = content.replace(/listed:{on:{CONTINUE:"playing"}}/g, 'listed:{on:{CONTINUE:"playing"},invoke:{src:()=>(cb)=>cb("CONTINUE")}}');
 content = content.replace(/Sr=\(\)=>{Zt\.send\("REFRESH"\)};/g, 'Sr=()=>{Zt.send("REFRESH")};Zt.send("REFRESH");');
 content = content.replace(/ClockIssue=\(\)=>{/g, 'ClockIssue=()=>{Zt.send("REFRESH");');
