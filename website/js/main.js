@@ -162,20 +162,20 @@ gsap.utils.toArray('.value-card').forEach((card, i) => {
 });
 
 // 图片视差效果
-gsap.utils.toArray('.image-container').forEach(container => {
-  const image = container.querySelector('img');
+// gsap.utils.toArray('.image-container').forEach(container => {
+//   const image = container.querySelector('img');
   
-  gsap.to(image, {
-    scrollTrigger: {
-      trigger: container,
-      start: 'top bottom',
-      end: 'bottom top',
-      scrub: true
-    },
-    y: -50,
-    ease: 'none'
-  });
-});
+//   gsap.to(image, {
+//     scrollTrigger: {
+//       trigger: container,
+//       start: 'top bottom',
+//       end: 'bottom top',
+//       scrub: true
+//     },
+//     y: -50,
+//     ease: 'none'
+//   });
+// });
 
 // 语言切换功能
 languageToggle.forEach(btn => {
@@ -188,10 +188,30 @@ languageToggle.forEach(btn => {
     // 添加当前按钮的active类
     btn.classList.add('active');
     
-    // 在这里可以实现语言切换逻辑
-    // toggleLanguage(currentLang);
+    // 实现语言切换逻辑
+    toggleLanguage(currentLang);
   });
 });
+
+// 语言切换实现
+function toggleLanguage(lang) {
+  document.querySelectorAll('[data-lang-zh], [data-lang-en]').forEach(element => {
+    if (lang === 'zh') {
+      if (element.hasAttribute('data-lang-zh')) {
+        element.innerHTML = element.getAttribute('data-lang-zh');
+      }
+      document.documentElement.lang = 'zh-CN';
+    } else {
+      if (element.hasAttribute('data-lang-en')) {
+        element.innerHTML = element.getAttribute('data-lang-en');
+      }
+      document.documentElement.lang = 'en';
+    }
+  });
+  
+  // 保存用户选择的语言到本地存储
+  localStorage.setItem('preferredLanguage', lang);
+}
 
 // 移动端菜单逻辑
 // 菜单切换逻辑
@@ -235,8 +255,8 @@ mobileLangBtns.forEach(btn => {
       }
     });
     
-    // 在这里可以实现语言切换逻辑
-    // toggleLanguage(currentLang);
+    // 实现语言切换逻辑
+    toggleLanguage(currentLang);
   });
 });
 
@@ -305,6 +325,17 @@ const lazyLoadImages = () => {
 // 页面加载完成后初始化
 window.addEventListener('load', () => {
   lazyLoadImages();
+  
+  // 从本地存储中获取用户之前选择的语言
+  const savedLanguage = localStorage.getItem('preferredLanguage');
+  if (savedLanguage) {
+    // 找到对应的语言按钮并触发点击事件
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      if (btn.dataset.lang === savedLanguage) {
+        btn.click();
+      }
+    });
+  }
   
   // 如果URL中有锚点，平滑滚动到目标位置
   if (window.location.hash) {
