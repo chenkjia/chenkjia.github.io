@@ -193,6 +193,7 @@ languageToggle.forEach(btn => {
   });
 });
 
+toggleLanguage('en');
 // 语言切换实现
 function toggleLanguage(lang) {
   document.querySelectorAll('[data-lang-zh], [data-lang-en]').forEach(element => {
