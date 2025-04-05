@@ -255,6 +255,14 @@ header.scrolled .logo img {
   width: 100%;
 }
 
+.nav-link.active {
+  color: var(--primary-color);
+}
+
+.nav-link.active::after {
+  width: 100%;
+}
+
 .language-toggle {
   display: flex;
   gap: 10px;
@@ -535,7 +543,15 @@ header.scrolled .logo img {
 
 /* 关于我们 */
 .about {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
   background-color: #fff;
+}
+
+.about .container {
+  width: 100%;
 }
 
 .about-content {
@@ -580,7 +596,15 @@ header.scrolled .logo img {
 
 /* 产品展示 */
 .products {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
   background-color: #f8f9fa;
+}
+
+.products .container {
+  width: 100%;
 }
 
 .product-grid {
@@ -1122,8 +1146,13 @@ footer {
   }
   
   .fruit {
-    width: 80px;
-    height: 80px;
+    transform: scale(0.8);
+  }
+  
+  .about, .products {
+    height: auto;
+    min-height: 100vh;
+    padding: 100px 0;
   }
 }
 
@@ -1237,10 +1266,17 @@ footer {
 }
 
 .mobile-nav-link {
-  font-size: 1.2rem;
+  display: block;
+  padding: 15px 0;
+  font-size: 1.5rem;
   font-weight: 500;
-  padding: 10px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  color: var(--primary-color);
 }
 
 .mobile-language-toggle {

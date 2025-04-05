@@ -253,20 +253,30 @@ const observerOptions = {
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      const activeSection = entry.target.id;
+      const id = entry.target.getAttribute('id');
       
-      // 更新导航菜单高亮
+      // 移除所有链接的激活状态
       navLinks.forEach(link => {
-        if (link.getAttribute('href') === `#${activeSection}`) {
-          link.classList.add('active');
-        } else {
-          link.classList.remove('active');
-        }
+        link.classList.remove('active');
       });
+      
+      // 移除移动导航链接的激活状态
+      const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+      mobileNavLinks.forEach(link => {
+        link.classList.remove('active');
+      });
+      
+      // 添加当前部分链接的激活状态
+      const activeDesktopLink = document.querySelector(`.nav-link[href="#${id}"]`);
+      const activeMobileLink = document.querySelector(`.mobile-nav-link[href="#${id}"]`);
+      
+      if (activeDesktopLink) activeDesktopLink.classList.add('active');
+      if (activeMobileLink) activeMobileLink.classList.add('active');
     }
   });
 }, observerOptions);
 
+// 观察所有部分
 sections.forEach(section => {
   observer.observe(section);
 });
@@ -305,4 +315,22 @@ window.addEventListener('load', () => {
       }, 1000);
     }
   }
+});
+
+// 导航链接平滑滚动
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    
+    const targetId = this.getAttribute('href');
+    const targetElement = document.querySelector(targetId);
+    
+    if (targetElement) {
+      // 使用平滑滚动到目标部分
+      window.scrollTo({
+        top: targetElement.offsetTop,
+        behavior: 'smooth'
+      });
+    }
+  });
 }); 
