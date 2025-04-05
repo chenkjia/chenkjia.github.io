@@ -193,7 +193,6 @@ languageToggle.forEach(btn => {
   });
 });
 
-toggleLanguage('en');
 // 语言切换实现
 function toggleLanguage(lang) {
   document.querySelectorAll('[data-lang-zh], [data-lang-en]').forEach(element => {
@@ -333,6 +332,13 @@ window.addEventListener('load', () => {
     // 找到对应的语言按钮并触发点击事件
     document.querySelectorAll('.lang-btn').forEach(btn => {
       if (btn.dataset.lang === savedLanguage) {
+        btn.click();
+      }
+    });
+  } else {
+    // 如果没有保存的语言偏好，默认显示英文
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      if (btn.dataset.lang === 'en') {
         btn.click();
       }
     });
