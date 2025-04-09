@@ -145,20 +145,6 @@ section {
   transform: translateY(-3px);
 }
 
-/* 自定义光标 */
-.cursor {
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--primary-color);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  transition: transform 0.1s;
-  mix-blend-mode: difference;
-}
-
 /* 滚动进度条 */
 .scroll-progress {
   position: fixed;
@@ -216,13 +202,13 @@ nav {
 }
 
 .logo img {
-  max-height: 60px;
+  max-height: 70px;
   width: auto;
   transition: var(--transition);
 }
 
 header.scrolled .logo img {
-  max-height: 50px;
+  max-height: 60px;
 }
 
 .nav-links {
@@ -336,6 +322,24 @@ header.scrolled .logo img {
   display: flex;
   flex-direction: column;
   line-height: 1.1;
+}
+
+.hero-logo {
+  max-width: 400px;
+  height: auto;
+  margin: 0 auto 20px;
+}
+
+@media (max-width: 768px) {
+  .hero-logo {
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-logo {
+    max-width: 240px;
+  }
 }
 
 .hero-slogan {
@@ -656,6 +660,7 @@ header.scrolled .logo img {
   background-color: #fff;
   position: relative;
   overflow: hidden;
+  padding: 100px 0;
 }
 
 .values::before {
@@ -1154,6 +1159,34 @@ footer {
     min-height: 100vh;
     padding: 100px 0;
   }
+  
+  .value-item {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  
+  .value-item:nth-child(even) {
+    flex-direction: column;
+  }
+  
+  .value-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .value-item:hover .value-title::after {
+    width: 80px;
+  }
+  
+  .value-list-item {
+    justify-content: center;
+  }
+  
+  /* 优化平板和移动端的动画延迟 */
+  [data-aos-delay] {
+    transition-delay: 0s !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1192,6 +1225,70 @@ footer {
   
   .value-list {
     grid-template-columns: 1fr;
+  }
+  
+  .value-item {
+    padding: 30px 15px;
+  }
+  
+  .value-description {
+    font-size: 0.95rem;
+  }
+  
+  .value-icon-circle {
+    width: 90px;
+    height: 90px;
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .value-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .value-item {
+    padding: 25px 15px;
+    margin-bottom: 30px;
+  }
+  
+  .value-icon-circle {
+    width: 80px;
+    height: 80px;
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+  }
+  
+  .value-title {
+    font-size: 1.5rem;
+  }
+  
+  .value-subtitle {
+    font-size: 1rem;
+  }
+  
+  .value-description {
+    font-size: 0.9rem;
+  }
+  
+  .value-list-item {
+    align-items: center;
+  }
+  
+  .value-list-text {
+    font-size: 0.9rem;
+  }
+  
+  .value-progress-title, .value-progress-percentage {
+    font-size: 0.85rem;
+  }
+  
+  .values-container {
+    gap: 40px;
+  }
+  
+  .section-header h2 {
+    font-size: 2rem;
   }
 }
 

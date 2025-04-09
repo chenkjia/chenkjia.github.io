@@ -2,12 +2,12 @@
 AOS.init({
   duration: 800,
   easing: 'ease-out',
-  once: false
+  once: false,
+  disable: 'mobile' // 在移动端禁用复杂动画以提高性能
 });
 
 // DOM元素
 const progress = document.querySelector('.progress');
-const cursor = document.querySelector('.cursor');
 const header = document.querySelector('header');
 const menuToggle = document.querySelector('.menu-toggle');
 const html = document.documentElement;
@@ -44,22 +44,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }, 1000);
 });
 
-// 自定义鼠标
-document.addEventListener('mousemove', (e) => {
-  cursor.style.left = `${e.clientX}px`;
-  cursor.style.top = `${e.clientY}px`;
-  
-  // 鼠标悬停在按钮和链接上时的效果
-  const target = e.target;
-  if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.closest('.btn')) {
-    cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
-    cursor.style.opacity = '0.5';
-  } else {
-    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-    cursor.style.opacity = '1';
-  }
-});
-
 // 页面滚动时导航栏样式变化
 window.addEventListener('scroll', () => {
   if (window.scrollY > 100) {
@@ -75,16 +59,11 @@ function startHeroAnimations() {
   const tl = gsap.timeline({defaults: {ease: 'power3.out'}});
   
   // 标题动画
-  tl.to(heroTitle.querySelector('.text-reveal:first-child'), {
+  tl.to(heroTitle.querySelector('.text-reveal'), {
     y: 0,
     opacity: 1,
     duration: 0.8
   })
-  .to(heroTitle.querySelector('.text-reveal:last-child'), {
-    y: 0,
-    opacity: 1,
-    duration: 0.8
-  }, '-=0.5')
   .to(heroSlogan, {
     y: 0,
     opacity: 1,
@@ -97,7 +76,7 @@ function startHeroAnimations() {
   }, '-=0.5');
   
   // 设置初始样式
-  gsap.set([heroTitle.querySelectorAll('.text-reveal'), heroSlogan, heroCta], {
+  gsap.set([heroTitle.querySelector('.text-reveal'), heroSlogan, heroCta], {
     y: 50,
     opacity: 0
   });
